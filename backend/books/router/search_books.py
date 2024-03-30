@@ -1,19 +1,36 @@
 from fastapi import APIRouter
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from .firestore_db import db
 
 router = APIRouter()
 
-creds = credentials.Certificate('./config.json')
-firebase_admin.initialize_app(creds)
-db = firestore.client()
+
+def get_books_by_isbn(isbn: str):
+    query_ref = db.collection('all_books').where(
+        'ISBN', '==', isbn, )
+
+    docs = query_ref.stream()
+
+    data = [res._data for res in docs]
+
+    return data
 
 
 @router.get("/books/search_isbn/{isbn}")
-async def get_books(isbn: str):
+async def search_books_isbn(isbn: str):
+    results = get_books_by_isbn(isbn)
+
+    return {
+        "results": results
+    }
+
+
+@router.get("/books/search_title/{title}")
+async def get_books_by_title(title: str):
+
+    title_arr = title.split("+")
+    title_arr = [item.capitalize() for item in title_arr]
     query_ref = db.collection('all_books').where(
-        'ISBN', '==', isbn)
+        'Keywords', 'array_contains_any', title_arr)
 
     docs = query_ref.stream()
 
@@ -26,10 +43,12 @@ async def get_books(isbn: str):
     }
 
 
-@router.get("/books/search_title/{title}")
-async def get_books(title: str):
+@router.get("/books/search_genre/{genre}")
+async def get_books_by_genre(genre: str):
+
+    gen = genre.capitalize()
     query_ref = db.collection('all_books').where(
-        'Title', '==', title)
+        'Genre', '==', genre)
 
     docs = query_ref.stream()
 

@@ -33,7 +33,7 @@ for item in (books_data):
         temp = item.copy()
         temp['Status'] = False
         temp['Book_ID'] = cur
-        temp['Keywords'] = temp['Title'].split("")
+        temp['Keywords'] = temp['Title'].split(" ")
         cur += 1
 
         doc_ref = db.collection('all_books').document()
