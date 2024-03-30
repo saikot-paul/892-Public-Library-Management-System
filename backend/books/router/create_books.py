@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Response
 from pydantic import BaseModel
 from .firestore_db import db
+from firebase_admin import firestore
 
 router = APIRouter()
 
@@ -19,20 +20,47 @@ class Book(DummyBook):
 
 @router.post('/books/create_book')
 async def create_book(data: DummyBook):
-    data['Status'] = False
+    copy = data.model_dump()
+    copy['Status'] = False
 
     count = db.collection('all_books').get()
     count = len(count)
 
-    data["Book_ID"] = count
-    data["Keywords"] = data['Title'].split(" ")
+    copy["Book_ID"] = count
+    copy["Keywords"] = copy['Title'].split(" ")
 
     doc_ref = db.collection('all_books').document()
-    doc_ref.set(data)
+    doc_ref.set(copy)
+
+    isbn = copy['ISBN']
+    filtered_book_data = {
+        'Title': copy['Title'],
+        'Genre': copy['Genre'],
+        'Author': copy['Author'],
+        'Keywords': copy['Keywords'],
+        'num_copies': 1,
+        'available_copies': 1
+    }
+
+    doc_ref = db.collection('filtered_books').document(isbn)
+    doc = doc_ref.get()
+
+    if doc.exists:
+        doc_ref.update({
+            'num_copies': firestore.Increment(1),
+            'available_copies': firestore.Increment(1)
+        })
+    else:
+        db.collection('filtered_books').document(isbn).set(filtered_book_data)
 
 
 @router.put('/books/edit_book')
 async def edit_book(data: Book):
+    doc = get_book_by_id(data)
+    db.collection('all_books').document(doc.id).update(data.model_dump())
+
+
+def get_book_by_id(data: Book):
     book_id = data.Book_ID
 
     query_ref = db.collection('all_books').where(
@@ -40,5 +68,4 @@ async def edit_book(data: Book):
     )
 
     doc = list(query_ref.stream())[0]
-
-    db.collection('all_books').document(doc.id).update(data.model_dump())
+    return doc
