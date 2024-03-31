@@ -1,4 +1,5 @@
 */venv/*
 venv/
 __pycache__/
-/backend/books/config.json
+config.json
+backend/books/firebase_temp.py

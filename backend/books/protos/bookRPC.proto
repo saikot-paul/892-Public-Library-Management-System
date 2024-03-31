@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package book; 
+
+service BookService { 
+
+    rpc SearchISBN(isbn) returns (BookArray);
+    rpc SearchTitle(title) returns (BookArray);
+    rpc SearchGenre(genre) returns (BookArray);
+    rpc CreateBook(Book) returns (google.Empty); 
+}

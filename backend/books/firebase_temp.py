@@ -1,40 +1,38 @@
 import firebase_admin
-from random import randint
-from firebase_admin import credentials
-from firebase_admin import firestore
+from firebase_admin import credentials, firestore
 
-creds = credentials.Certificate('./config.json')
+# Initialize Firebase Admin
+creds = credentials.Certificate('./router/config.json')
 firebase_admin.initialize_app(creds)
 
+# Firestore client
 db = firestore.client()
 
-books_data = [
-    {"Title": "To Kill a Mockingbird", "Author": "Harper Lee",
-        "Genre": "Fiction", "ISBN": "978-0-06-112008-4"},
-    {"Title": "The Kite Runner", "Author": "Khaled Hosseini",
-        "Genre": "Fiction", "ISBN": "978-0-374-52907-2"},
-    {"Title": "Moby Dick", "Author": "Herman Melville",
-        "Genre": "Fiction", "ISBN": "978-0-14-243724-7"},
-    {"Title": "1984", "Author": "George Orwell",
-        "Genre": "Science Fiction", "ISBN": "978-0-452-28423-4"},
-    {"Title": "The Great Gatsby", "Author": "F. Scott Fitzgerald",
-        "Genre": "Fiction", "ISBN": "978-0-7432-7356-5"},
-    {"Title": "Guinness World Records", "Author": "Guinness World Records",
-        "Genre": "Non-Fiction", "ISBN": "978-1-910561-64-5"},
-    {"Title": "Oxford Dictionary", "Author": "Oxford University Press",
-        "Genre": "Reference", "ISBN": "978-0-19-957112-3"},
-]
+# Fetch documents from Firestore
+docs = db.collection('all_books').get()
+filtered = {}
 
-result = []
-cur = 0
-for item in (books_data):
-    copies = randint(1, 3)
-    for i in range(copies):
-        temp = item.copy()
-        temp['Status'] = False
-        temp['Book_ID'] = cur
-        temp['Keywords'] = temp['Title'].split(" ")
-        cur += 1
+# Process documents
+for doc in docs:
+    data = doc.to_dict()  # Use to_dict() to get document data
+    isbn = data['ISBN']
 
-        doc_ref = db.collection('all_books').document()
-        doc_ref.set(temp)
+    # Initialize or update the entry for this ISBN
+    if isbn not in filtered:
+        filtered[isbn] = {
+            'Title': data['Title'],
+            'Genre': data['Genre'],
+            'Author': data['Author'],
+            'Keywords': data['Title'].split(" "),
+            'num_copies': 1,
+            'available_copies': 0 if data['Status'] else 1,
+            'checkout_list': []
+        }
+    else:
+        filtered[isbn]['num_copies'] += 1
+        if not data['Status']:  # Increment available_copies if not checked out
+            filtered[isbn]['available_copies'] += 1
+
+# Print the summarized data
+for key, item in filtered.items():
+    db.collection('filtered_books').document(key).set(item)
