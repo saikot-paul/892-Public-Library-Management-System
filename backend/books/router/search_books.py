@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .firestore_db import db
+from firestore_db import db
 
 router = APIRouter()
 
