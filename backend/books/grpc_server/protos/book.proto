@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package books; 
+
+
+message ISBN {
+    string isbn_num = 1;
+}
+
+message Title {
+    string title_str = 1;  
+} 
+
+message Genre {
+    string genre_str = 1;  
+}
+
+message Successful { 
+    bool ack = 1; 
+}
+
+service Books {
+    rpc SearchISBN(ISBN) returns (BookISBN);
+    rpc SearchTitle(Title) returns (BookArray);
+    rpc SearchGenre(Genre) returns (BookArray);
+
+    rpc CreateBook(Book) returns (Successful); 
+    rpc UpdateBook(UBook) returns (Successful);
+    rpc DeleteBook(BookID) returns (Successful); 
+
+    rpc CheckoutBook(CheckInfo) returns (Successful); 
+}
+
+message Book { 
+    string title = 1; 
+    string genre = 2; 
+    string author = 3; 
+    string isbn = 4; 
+}
+
+message UBook { 
+    string title = 1; 
+    string genre = 2; 
+    string author = 3; 
+    string isbn = 4; 
+    int32 book_id = 5; 
+    bool status = 6; 
+}
+
+message BookID { 
+    int32 book_id = 1;
+} 
+
+message CheckInfo { 
+    string user_id = 1; 
+    string isbn = 2; 
+}
+
+message BookSearch { 
+    string title = 1; 
+    repeated string checkout_list = 2; 
+    string genre = 3;
+    repeated string keywords = 4; 
+    string author = 5; 
+    int32 available_copies = 6; 
+    int32 num_copies = 7; 
+} 
+
+message BookISBN { 
+    bool empty = 1; 
+    optional BookSearch book = 2; 
+}
+ 
+message BookArray { 
+    repeated BookSearch books = 2; 
+} 
