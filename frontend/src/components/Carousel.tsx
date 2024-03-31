@@ -21,7 +21,7 @@ function Carousel() {
 
   // cardsPerPage is the number of cards that will be displayed per page
   // you can modify for your needs
-  const cardsPerPage = 4;
+  const cardsPerPage = 3;
   // this is just a dummy array of cards it uses the MUI card demo and repeats it 10 times
   const duplicateCards: React.ReactElement[] = Array.from(
     { length: 10 },
@@ -50,7 +50,7 @@ function Carousel() {
   }, []);
   // this sets the container width to the number of cards per page * 250px
   // which we know because it is defined in the card component
-  const containerWidth = cardsPerPage * 250; // 250px per card
+  const containerWidth = cardsPerPage * 33; // rem per card
 
   return (
     //  outer box that holds the carousel and the buttons
@@ -61,20 +61,20 @@ function Carousel() {
         alignItems: "center",
         alignContent: "center",
         justifyContent: "center",
-        height: "400px",
+        height: "100%",
         width: "100%",
         marginTop: "40px",
       }}
     >
       <IconButton
         onClick={handlePrevPage}
-        sx={{ margin: 5 }}
+        sx={{ margin: 5, color:"white" }}
         disabled={currentPage === 0}
       >
         {/* this is the button that will go to the previous page you can change these icons to whatever you wish*/}
         <NavigateBeforeIcon />
       </IconButton>
-      <Box sx={{ width: `${containerWidth}px`, height: "100%" }}>
+      <Box sx={{ width: `${containerWidth}%`, height: "100%" }}>
         {/* this is the box that holds the cards and the slide animation,
         in this implementation the card is already constructed but in later versions you will see how the
         items you wish to use will be dynamically created with the map method*/}
@@ -110,6 +110,7 @@ function Carousel() {
         onClick={handleNextPage}
         sx={{
           margin: 5,
+          color: "white"
         }}
         disabled={
           currentPage >= Math.ceil((cards.length || 0) / cardsPerPage) - 1
