@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Response
 from pydantic import BaseModel
-from .firestore_db import db
+from db.firestore_db import db
 from firebase_admin import firestore
 
 router = APIRouter()
