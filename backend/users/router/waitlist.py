@@ -1,49 +1,51 @@
 from fastapi import APIRouter, HTTPException
 from db.firestore_db import db
 
+import users_common_funcs as helper
+
 router = APIRouter()
 
 # TODO: handle this endpoint such that only a user can retrieve the waitlist
 #       that belongs to their account
 @router.get("/{uid}/waitlist")
 def get_waitlist(uid: str):
-    doc_ref = db.document(f'users/{uid}')
+    # Check if user exists
+    user_dict = helper.get_user_info(uid)
 
-    doc = doc_ref.get()
+    if user_dict is None:
+        raise HTTPException(404, "User {uid} not found")
 
-    if doc.exists:
-        wishlist = doc.to_dict().get('wishlist', [])
-    else:
-        raise HTTPException(404, f"User {uid} wishlist not found")
+    # Get waitlist
+    waitlist_books = []
+    waitlist = user_dict.get('waitlist')
 
-    print(wishlist)
+    if waitlist is None:
+        return []
 
-    wishlist_books = []
-
-    for book_ref in wishlist:
+    # Get book info
+    for book_ref in waitlist:
         book_doc = book_ref.get()
 
         print(f"path to book: {book_ref.path}")
 
         # TODO: error handling if book_doc does not exist
         if book_doc.exists:
-            wishlist_books.append(book_doc.to_dict())
+            waitlist_books.append(book_doc.to_dict())
         else:
             print(f"Book {book_doc.id} does not exist")
-    return wishlist_books
+    return waitlist_books
 
 @router.post("/{uid}/waitlist/{book_id}")
 def append_to_waitlist(uid: str, book_id: str):
     # Check if user exists
     user_doc_ref = db.document(f'users/{uid}')
+    user_dict = helper.get_user_info(uid)
 
-    user_doc = user_doc_ref.get()
-
-    if not user_doc.exists:
-        raise HTTPException(404, f"User {uid} wishlist not found")
+    if user_dict is None:
+        raise HTTPException(404, "User {uid} not found")
     
-    # Get wishlist
-    wishlist = user_doc.to_dict().get('wishlist', [])
+    # Get waitlist
+    waitlist = user_dict.get('waitlist', [])
 
     # Check if book exists
     book_doc_ref = db.document(f'all_books/{book_id}')
@@ -52,10 +54,34 @@ def append_to_waitlist(uid: str, book_id: str):
     if not book_doc.exists:
         raise HTTPException(404, f"Book {book_id} not found")
     
-    # Append book doc ref to wishlist
-    wishlist.append(book_doc_ref)
+    # Append book doc ref to waitlist
+    waitlist.append(book_doc_ref)
 
     # Update user doc with new wishlist
-    user_doc_ref.update({'wishlist': wishlist})
+    user_doc_ref.update({'waitlist': waitlist})
 
-    return {"message": f"Book {book_id} appended to wishlist successfully."}
+    return {"message": f"Book {book_id} appended to waitlist successfully."}
+
+@router.delete("/{uid}/waitlist/{book_id}")
+def delete_from_waitlist(uid: str, book_id: str):
+    # Check if user exists
+    user_doc_ref = db.document(f'users/{uid}')
+    user_dict = helper.get_user_info(uid)
+
+    if user_dict is None:
+        raise HTTPException(404, "User {uid} not found")
+    
+    # Get waitlist
+    waitlist = user_dict.get('waitlist', [])
+
+    # Construct reference to book doc
+    book_doc_ref = db.document(f'/all_books/{book_id}')
+
+    if book_doc_ref not in waitlist:
+        raise HTTPException(404, "Book {book_id} not in waitlist")
+    
+    # Delete book from user waitlist
+    waitlist.remove(book_doc_ref)
+    user_doc_ref.update({'waitlist': waitlist})
+    
+    return {"message": f"Book {book_id} successfully removed."}
