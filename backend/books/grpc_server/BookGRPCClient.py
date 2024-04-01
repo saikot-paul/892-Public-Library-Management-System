@@ -181,7 +181,8 @@ async def checkout_book(data: Checkout):
         response = stub.CheckoutBook(request)
         print("CheckoutBook Response:", response)
 
-        print(json_format.MessageToJson(response))
+        return json_format.MessageToJson(response)
+
 
     except grpc.RpcError as e:
         print(f"RPC failed with code {e.code()}: {e.details()}")
