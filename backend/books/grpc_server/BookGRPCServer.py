@@ -6,7 +6,7 @@ from firebase_admin import firestore
 from concurrent import futures
 import grpc
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class BookServer(book_pb2_grpc.BooksServicer):
 
@@ -219,41 +219,53 @@ class BookServer(book_pb2_grpc.BooksServicer):
 
     def CheckoutBook(self, request, context):
 
+        # Use batch such that write operations are performed as one unit
+        batch = db.batch()
+
         uid = request.user_id
         isbn = request.isbn
 
-        doc_ref = db.collection('filtered_books').document(isbn)
-        doc = doc_ref.get()
+        ubook_doc_ref = db.collection('filtered_books').document(isbn)
+        ubook_doc = ubook_doc_ref.get()
 
-        if (doc.exists):
+        if (ubook_doc.exists):
             print("Book exists")
-            data = doc.to_dict()
-            if (data['available_copies'] >= 1):
-                print("available copies: ", data['available_copies'])
-                data['available_copies'] -= 1
-                data['checkout_list'].append(uid)
-                doc_ref.update(data)
+            ubook_data = ubook_doc.to_dict()
+            if (ubook_data['available_copies'] >= 1):
+                print("available copies: ", ubook_data['available_copies'])
+                ubook_data['available_copies'] -= 1
+                ubook_data['checkout_list'].append(uid)
 
                 query_ref = db.collection(
                     'all_books').where('ISBN', '==', isbn)
                 books = query_ref.stream()
+                batch.update(ubook_doc_ref, ubook_data)
 
                 for b in books:
                     b_data = b._data
                     if not b_data['Status']:
                         print("doc id of book", b.id)
                         # Found a book with matching ISBN that has not been borrowed
-                        db.collection('all_books').document(b.id).update({
-                            "Status": True
+                        all_books_doc_ref = db.collection('all_books').document(b.id)
+                        batch.update(all_books_doc_ref, {
+                            'Status': True,
+                            'borrowed_by': uid,
                         })
 
                         # Add book to user's borrowed book collection
                         print(f'/users/{uid}/borrowed_books/{b.id}')
-                        db.document(f'/users/{uid}/borrowed_books/{b.id}').set({
+                        borrowed_doc_ref = db.document(f'users/{uid}/borrowed_books/{b.id}')
+                        batch.set(borrowed_doc_ref, {
                             'isbn': isbn,
-                            'book_doc_ref': db.document(f'/all_books/{isbn}'),
-                            'borrow_date': datetime.now()
+                            'all_books_doc_ref': db.document(f'all_books/{b.id}'),
+                            'filtered_books_doc_ref': db.document(f'filtered_books/{isbn}'),
+                            'borrow_date': datetime.now(),
+                            'due_date': datetime.now() + timedelta(days=14),
+                            'book_id': b_data['Book_ID']
                         })
+
+                        # Update all documents
+                        batch.commit()
 
                         return book_pb2.Successful(ack=True, message=f"Successfully checked out book with isbn {isbn}")
             else:
@@ -264,6 +276,58 @@ class BookServer(book_pb2_grpc.BooksServicer):
         
         return book_pb2.Successful(ack=False, message=f"Unable to complete request")
     
+    def ReturnBook(self, request, context):
+        print("ReturnBook()")
+
+        # Use batch such that write operations are performed as one unit
+        batch = db.batch()
+
+        uid = request.user_id
+        book_id = request.book_id
+
+        # Get the book doc info
+        query_ref = db.collection('all_books') \
+                        .where('Book_ID', '==', book_id) \
+                        .where('borrowed_by', '==', uid)
+        returning_books = query_ref.get()
+        
+        print(f"num of books found with id {book_id}: {len(returning_books)}")
+
+        if len(returning_books) != 1:
+            return book_pb2.Successful(ack=False, message=f"User {uid} has less or more than one book with id of {book_id}")
+
+        ret_book_data = returning_books[0].to_dict()
+        isbn = ret_book_data['ISBN']
+
+        # Get the document referencing the borrowed book
+        borrowed_book_doc_ref = db.document(f'users/{uid}/borrowed_books/{returning_books[0].id}')
+        borrowed_book_doc = borrowed_book_doc_ref.get()
+        borrowed_book_data = borrowed_book_doc.to_dict()
+
+        if not borrowed_book_doc.exists:
+            return book_pb2.Successful(ack=False, message=f"Book {isbn} is not borrowed by user {uid}")
+
+        # Increment available books counter in filtered_books
+        filtered_books_doc_data = borrowed_book_data['filtered_books_doc_ref'].get().to_dict()
+        filtered_books_doc_data['checkout_list'].remove(uid)
+        batch.update(borrowed_book_data['filtered_books_doc_ref'], {
+            'available_copies': filtered_books_doc_data['available_copies'] + 1,
+            'checkout_list': filtered_books_doc_data['checkout_list']
+        })
+
+        # Change the borrowed status of the book in all_books to false
+        batch.update(borrowed_book_data['all_books_doc_ref'], {
+            'Status': False,
+            'borrowed_by': firestore.DELETE_FIELD
+        })
+
+        # Delete borrowed book doc from user indicating book has been returned
+        batch.delete(borrowed_book_doc_ref)
+
+        batch.commit()
+
+        return book_pb2.Successful(ack=True, message=f"Book successfully returned")
+
     def WaitlistBook(self, request, context):
         
         # Get book's reference and data
