@@ -27,6 +27,10 @@ class Checkout(BaseModel):
     user_id: str
     isbn: str
 
+class ReturnBookData(BaseModel):
+    user_id: str
+    book_id: int
+
 
 app = FastAPI()
 
@@ -169,7 +173,7 @@ async def delete_book(id: id):
         traceback.print_exc()
 
 
-@app.put('/books/checkout_books')
+@app.put('/books/checkout_book')
 async def checkout_book(data: Checkout):
 
     request = book_pb2.CheckInfo(user_id=data.user_id, isbn=data.isbn)
@@ -180,6 +184,24 @@ async def checkout_book(data: Checkout):
 
         response = stub.CheckoutBook(request)
         print("CheckoutBook Response:", response)
+
+        print(json_format.MessageToJson(response))
+
+    except grpc.RpcError as e:
+        print(f"RPC failed with code {e.code()}: {e.details()}")
+        traceback.print_exc()
+
+@app.put('/books/return_book')
+async def return_book(data: ReturnBookData):
+
+    request = book_pb2.ReturnBookInfo(user_id=data.user_id, book_id=data.book_id)
+
+    try:
+        channel = grpc.insecure_channel('localhost:50051')
+        stub = book_pb2_grpc.BooksStub(channel)
+
+        response = stub.ReturnBook(request)
+        print("ReturnBook Response:", response)
 
         print(json_format.MessageToJson(response))
 

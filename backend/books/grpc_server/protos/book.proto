@@ -30,6 +30,7 @@ service Books {
     rpc DeleteBook(BookID) returns (Successful); 
 
     rpc CheckoutBook(CheckInfo) returns (Successful); 
+    rpc ReturnBook(ReturnBookInfo) returns (Successful);
     
     rpc WaitlistBook(CheckInfo) returns (Successful);
 }
@@ -57,6 +58,11 @@ message BookID {
 message CheckInfo { 
     string user_id = 1; 
     string isbn = 2; 
+}
+
+message ReturnBookInfo {
+    string user_id = 1;
+    int32 book_id = 2;
 }
 
 message BookSearch { 

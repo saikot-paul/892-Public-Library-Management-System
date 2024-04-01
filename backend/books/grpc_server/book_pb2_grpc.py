@@ -49,6 +49,11 @@ class BooksStub(object):
                 request_serializer=book__pb2.CheckInfo.SerializeToString,
                 response_deserializer=book__pb2.Successful.FromString,
                 )
+        self.ReturnBook = channel.unary_unary(
+                '/books.Books/ReturnBook',
+                request_serializer=book__pb2.ReturnBookInfo.SerializeToString,
+                response_deserializer=book__pb2.Successful.FromString,
+                )
         self.WaitlistBook = channel.unary_unary(
                 '/books.Books/WaitlistBook',
                 request_serializer=book__pb2.CheckInfo.SerializeToString,
@@ -101,6 +106,12 @@ class BooksServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ReturnBook(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def WaitlistBook(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -143,6 +154,11 @@ def add_BooksServicer_to_server(servicer, server):
             'CheckoutBook': grpc.unary_unary_rpc_method_handler(
                     servicer.CheckoutBook,
                     request_deserializer=book__pb2.CheckInfo.FromString,
+                    response_serializer=book__pb2.Successful.SerializeToString,
+            ),
+            'ReturnBook': grpc.unary_unary_rpc_method_handler(
+                    servicer.ReturnBook,
+                    request_deserializer=book__pb2.ReturnBookInfo.FromString,
                     response_serializer=book__pb2.Successful.SerializeToString,
             ),
             'WaitlistBook': grpc.unary_unary_rpc_method_handler(
@@ -275,6 +291,23 @@ class Books(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/books.Books/CheckoutBook',
             book__pb2.CheckInfo.SerializeToString,
+            book__pb2.Successful.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ReturnBook(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/books.Books/ReturnBook',
+            book__pb2.ReturnBookInfo.SerializeToString,
             book__pb2.Successful.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
