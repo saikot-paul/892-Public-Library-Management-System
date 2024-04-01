@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from db.firestore_db import db
+from backend.users.grpc_server.firestore_db import db
 
 router = APIRouter()
 

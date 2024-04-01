@@ -1,4 +1,4 @@
-from db.firestore_db import db
+from backend.users.grpc_server.firestore_db import db
 
 def get_user_info(uid: str):
     user_doc_ref = db.document(f'users/{uid}')
