@@ -187,5 +187,20 @@ async def checkout_book(data: Checkout):
         print(f"RPC failed with code {e.code()}: {e.details()}")
         traceback.print_exc()
 
+@app.put('/book/waitlist')
+async def waitlist_for_book(data: Checkout):
 
-    
+    request = book_pb2.WaitlistBook(user_id=data.user_id, isb=data.isbn)
+
+    try:
+        channel = grpc.insecure_channel('localhost:50051')
+        stub = book_pb2_grpc.BooksStub(channel)
+
+        response = stub.WaitlistBook(request)
+        print("WaitlistBook Response:", response)
+
+        print(json_format.MessageToJson(response))
+
+    except grpc.RpcError as e:
+        print(f"RPC failed with code {e.code()}: {e.details()}")
+        traceback.print_exc()
