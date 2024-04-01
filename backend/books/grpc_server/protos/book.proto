@@ -17,6 +17,7 @@ message Genre {
 
 message Successful { 
     bool ack = 1; 
+    string message = 2;
 }
 
 service Books {
@@ -29,6 +30,8 @@ service Books {
     rpc DeleteBook(BookID) returns (Successful); 
 
     rpc CheckoutBook(CheckInfo) returns (Successful); 
+    
+    rpc WaitlistBook(CheckInfo) returns (Successful);
 }
 
 message Book { 
