@@ -175,16 +175,18 @@ class BookServer(book_pb2_grpc.BooksServicer):
             data = doc._data
 
             doc_ref = db.collection('filtered_books').document(data['ISBN'])
+            doc = doc_ref.get()
+            filtered_data = doc.to_dict()
             if data['Status']:
-                data['available_copies'] -= 1
-            else:
-                doc_ref.update({
-                    'Title': request.title,
-                    'Author': request.author,
-                    'Genre': request.genre,
-                    'Keywords': request.title.split(" "),
-                    'available_copies': data['available_copies']
-                })
+                filtered_data['available_copies'] -= 1
+
+            doc_ref.update({
+                'Title': request.title,
+                'Author': request.author,
+                'Genre': request.genre,
+                'Keywords': request.title.split(" "),
+                'available_copies': data['available_copies']
+            })
 
             db.collection('all_books').document(doc.id).update(data)
             return book_pb2.Successful(ack=True)
