@@ -102,6 +102,30 @@ class BookServer(book_pb2_grpc.BooksServicer):
 
         return book_pb2.BookArray()
 
+    def GetAllBooks(self, request, context):
+
+        print(request)
+        docs = db.collection('all_books').get()
+
+        books = []
+        for book in docs:
+            data = book.to_dict()
+            tmp = book_pb2.UBook(
+                title=data['Title'],
+                genre=data['Genre'],
+                author=data['Author'],
+                isbn=data["ISBN"],
+                book_id=data["Book_ID"],
+                status=data["Status"]
+            )
+            books.append(tmp)
+
+        print(books)
+        empty = len(books) == 0
+        return book_pb2.UBookArr(
+            empty=empty, books=books
+        )
+
     def CreateBook(self, request, context):
 
         print(f'Called CreateBook: {request}')
