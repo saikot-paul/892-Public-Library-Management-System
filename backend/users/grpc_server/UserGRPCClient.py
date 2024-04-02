@@ -11,11 +11,21 @@ app = FastAPI()
 channel = grpc.insecure_channel('localhost:50052')
 stub = user_pb2_grpc.UsersStub(channel)
 
-class UserInfo(BaseModel):
+class UpdateUserInfo(BaseModel):
     first_name: str | None = None
     last_name: str | None = None
     contact_number: str | None = None
     postal_code: str | None = None
+
+class CreateUserInfo(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None
+    contact_number: str | None = None
+    postal_code: str | None = None
+    email: str
+    is_admin: bool
+    uid: str
+
 
 @app.get("/{uid}/borrowed_books")
 def get_borrowed_books(uid: str):
@@ -102,6 +112,25 @@ def delete_from_waitlist(uid: str, isbn: str):
         traceback.print_exc()
         raise HTTPException(500, "Internal server error")
 
+@app.get("/users")
+def get_all_users_info():
+    request = user_pb2.EmptyInfo()
+
+    try:
+        response = stub.GetAllUsersInfo(request)
+        print("GetAllUsersInfo Response: ", response)
+
+        data = json_format.MessageToDict(response)
+
+        if 'errorCode' in data:
+            raise HTTPException(data['errorCode'], data['message'])
+
+        return data
+    except grpc.RpcError as e:
+        print(f"RPC failed with code {e.code()}: {e.details()}")
+        traceback.print_exc()
+        raise HTTPException(500, "Internal server error")
+
 @app.get("/users/{uid}")
 def get_user_info(uid: str):
     request = user_pb2.UID(uid=uid)
@@ -122,7 +151,7 @@ def get_user_info(uid: str):
         raise HTTPException(500, "Internal server error")
     
 @app.put("/users/{uid}")
-def update_user_info(uid: str, u_info: UserInfo):
+def update_user_info(uid: str, u_info: UpdateUserInfo):
     req_data = u_info.dict()
     request = json_format.ParseDict({'uid':uid} | req_data, user_pb2.UpdateUserInfoRequest())
 
@@ -131,6 +160,45 @@ def update_user_info(uid: str, u_info: UserInfo):
     try:
         response = stub.UpdateUserInfo(request)
         print("UpdateUserInfo Response: ", response)
+
+        data = json_format.MessageToDict(response)
+
+        if 'errorCode' in data:
+            raise HTTPException(data['errorCode'], data['message'])
+
+        return data
+    except grpc.RpcError as e:
+        print(f"RPC failed with code {e.code()}: {e.details()}")
+        traceback.print_exc()
+        raise HTTPException(500, "Internal server error")
+
+@app.post("/users")
+def create_user(u_info: CreateUserInfo):
+    request = json_format.ParseDict(u_info.dict(), user_pb2.CreateUserInfo())
+
+    try:
+        response = stub.CreateUser(request)
+        print("CreateUser Response: ", response)
+
+        data = json_format.MessageToDict(response)
+
+        if 'errorCode' in data:
+            raise HTTPException(data['errorCode'], data['message'])
+
+        return data
+    except grpc.RpcError as e:
+        print(f"RPC failed with code {e.code()}: {e.details()}")
+        traceback.print_exc()
+        raise HTTPException(500, "Internal server error")
+
+
+@app.delete("/users/{uid}")
+def delete_user(uid: str):
+    request = user_pb2.UID(uid=uid)
+
+    try:
+        response = stub.DeleteUser(request)
+        print("DeleteUser Response: ", response)
 
         data = json_format.MessageToDict(response)
 
