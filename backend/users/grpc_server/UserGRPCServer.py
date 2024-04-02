@@ -22,19 +22,21 @@ class UserServer(user_pb2_grpc.UsersServicer):
 
         for book in borrowed_books:
             # Get book data
+            """
             bb_data = book.to_dict()
             book_data = bb_data['all_books_doc_ref'].get().to_dict()
             book_data = {key.lower(): value for key, value in book_data.items()}
+            """
 
             book_message = user_pb2.AllBooksBook(
-                title = book_data.get('title', ''),
-                borrowed_by = book_data.get('borrowed_by', ''),
-                genre = book_data.get('genre', ''),
-                status = book_data.get('status', None),
-                keywords = book_data.get('keywords', []),
-                author = book_data.get('author', ''),
-                book_id = book_data.get('book_id', -1),
-                isbn = book_data.get('isbn', '')
+                title=book.get('title', ''),
+                borrowed_by=book.get('borrowed_by', ''),
+                genre=book.get('genre', ''),
+                status=book.get('status', None),
+                keywords=book.get('keywords', []),
+                author=book.get('author', ''),
+                book_id=book.get('book_id', -1),
+                isbn=book.get('isbn', '')
             )
 
             all_books_response.books.append(book_message)
