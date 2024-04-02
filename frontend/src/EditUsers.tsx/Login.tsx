@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
-import { app } from "./firebaseConfig";
+import { app } from "../pages/firebaseConfig";
 //import "./assets/Login.css";
 import "../assets/Login.css";
 import { getAuth } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth/cordova";
 import { FirebaseError } from "firebase/app";
-import Home from "./Home";
-import Register from "./Register";
+import Home from "../pages/Home";
+import Register from "../pages/Register";
 
 
 const Login: React.FC = () => {
