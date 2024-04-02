@@ -328,34 +328,6 @@ class BookServer(book_pb2_grpc.BooksServicer):
 
         return book_pb2.Successful(ack=True, message=f"Book successfully returned")
 
-    def WaitlistBook(self, request, context):
-        
-        # Get book's reference and data
-        ubook_doc_ref = db.collection('filtered_books').document(request.isbn)
-        ubook_doc = ubook_doc_ref.get()
-
-        if not ubook_doc.exists:
-            return book_pb2.Successful(ack=False, message=f"Unique book with isbn {request.isbn} cannot be found")
-        
-        ubook_data = ubook_doc.to_dict()
-
-        # Create doc in user's waitlisted_books collection
-        db.document(f'users/{request.user_id}/waitlisted_books/{request.isbn}').set({
-            'filtered_books_ref': db.document(f'filtered_books/{request.isbn}'),
-            'isbn': request.isbn,
-            'title': ubook_data.get('title'),
-            'waitlist_date': datetime.now()
-        })
-    
-        # Add the user to the unique book's waitlist array
-        if 'waitlist' in ubook_data:
-            ubook_data['waitlist'].append(request.user_id)
-        else:
-            ubook_data['waitlist'] = [request.user_id]
-        ubook_doc_ref.update({'waitlist': ubook_data['waitlist']})
-
-        return book_pb2_grpc.Successful(ack=False, message=f"User {request.user_id} has been added to book {request.isbn} waitlist")
-
     def get_books_by_isbn(self, isbn: str):
         """
         Helper function to get a list of books with the same isbn

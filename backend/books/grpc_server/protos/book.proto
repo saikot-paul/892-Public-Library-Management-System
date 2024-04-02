@@ -31,8 +31,6 @@ service Books {
 
     rpc CheckoutBook(CheckInfo) returns (Successful); 
     rpc ReturnBook(ReturnBookInfo) returns (Successful);
-    
-    rpc WaitlistBook(CheckInfo) returns (Successful);
 }
 
 message Book { 
