@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package users; 
+
+service Users {
+    rpc GetBorrowedBooks(UID) returns (AllBooksMessage);
+
+    rpc GetWaitlist(UID) returns (FilteredBooksMessage);
+    rpc AppendToWaitlist(UID_ISBN) returns (SimpleMessage);
+    rpc DeleteFromWaitlist(UID_ISBN) returns (SimpleMessage);
+
+    rpc GetRecommendations(UID) returns (FilteredBooksMessage);
+
+    rpc GetUserInfo(UID) returns (UserInfoMessage);
+    rpc UpdateUserInfo(UpdateUserInfoRequest) returns (SimpleMessage);
+}
+
+// Params
+message UID {
+    string uid = 1;
+}
+
+message UID_ISBN {
+    string uid = 1;
+    string isbn = 2;
+}
+
+// Return messages
+message SimpleMessage {
+    bool success = 1;
+    int32 error_code = 2;
+    string message = 3;
+}
+
+message AllBooksBook {
+    string title = 1;
+    string borrowed_by = 2;
+    string genre = 3;
+    bool status = 4;
+    repeated string keywords = 5;
+    string author = 6;
+    int32 book_id = 7;
+    string isbn = 8;
+}
+
+message FilteredBooksBook {
+    string title = 1;
+    repeated string checkout_list = 2;
+    string genre = 3;
+    bool status = 4;
+    repeated string keywords = 5;
+    string author = 6;
+    string isbn = 7;
+    int32 available_copies = 8;
+    int32 num_copies = 9;
+}
+
+message AllBooksMessage {
+    bool success = 1;
+    repeated AllBooksBook books = 2;
+    string message = 3;
+}
+
+message FilteredBooksMessage {
+    bool success = 1;
+    repeated FilteredBooksBook books = 2;
+    string message = 3;
+}
+
+message UserInfo {
+    string first_name = 1;
+    string last_name = 2;
+    string contact_number = 3;
+    string postal_code = 4;
+    string email = 5;
+    repeated FilteredBooksBook waitlist_books = 6;
+    repeated AllBooksBook borrowed_books = 7;
+}
+
+message UserInfoMessage {
+    bool success = 1;
+    int32 error_code = 2;
+    UserInfo user_info = 3;
+    string message = 4;
+}
+
+message UpdateUserInfoRequest {
+    string uid = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string contact_number = 4;
+    string postal_code = 5;
+}
