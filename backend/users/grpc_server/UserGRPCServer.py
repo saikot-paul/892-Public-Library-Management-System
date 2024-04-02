@@ -5,6 +5,7 @@ from firestore_db import db
 from firebase_admin import firestore
 from concurrent import futures
 import grpc
+from google.protobuf import json_format
 
 from router.borrowed_books import *
 from router.waitlist import *
@@ -165,6 +166,65 @@ class UserServer(user_pb2_grpc.UsersServicer):
             message = ret_val['message']
         )
 
+    def GetAllUsersInfo(self, request, context):
+        print("GetAllUsersInfo()")
+
+        # get uids of all users
+        users_ref = db.collection('users')
+        all_user_docs = users_ref.list_documents()
+        user_ids = [doc.id for doc in all_user_docs]
+
+        all_users_info = []
+
+        for uid in user_ids:
+            print(uid)
+            try:
+                user_info_data = get_user_info(uid)
+            except HTTPException as e:
+                return user_pb2.UserInfoMessage(
+                    success = False,
+                    error_code = e.status_code,
+                    message = e.detail
+                )
+            except Exception as e:
+                return user_pb2.UserInfoMessage(
+                    success = False,
+                    error_code = 500,   
+                    message = "Internal server error"
+                )
+
+            user_info_msg = json_format.ParseDict(user_info_data, user_pb2.UserInfo())
+
+            print("here")
+
+            if 'waitlist_books' in user_info_data:
+                user_info_msg.waitlist_books.extend([])
+
+                for book in user_info_data['waitlist_books']:
+                    filtered_book = json_format.ParseDict(book, user_pb2.FilteredBooksBook())
+                    user_info_msg.waitlist_books.append(filtered_book)
+
+            print("here1")
+
+            if 'borrowed_books' in user_info_data:
+                user_info_msg.borrowed_books.extend([])
+
+                for book in user_info_data['borrowed_books']:
+                    book_message = json_format.ParseDict(book, user_pb2.AllBooksBook())
+                    user_info_msg.borrowed_books.append(book_message)
+
+            print("here2")
+
+            all_users_info.append(user_info_msg)
+
+            print("here3")
+
+        return user_pb2.AllUsersInfoMessage(
+            success = True,
+            user_info = all_users_info,
+            message = f"Retrieved {uid} info successfully."
+        )
+
     def GetUserInfo(self, request, context):
         uid = request.uid
 
@@ -185,47 +245,20 @@ class UserServer(user_pb2_grpc.UsersServicer):
                 message = "Internal server error"
             )
 
-        print(user_info_data)
-
-        user_info_msg = user_pb2.UserInfo(
-            first_name = user_info_data.get('first_name', ''),
-            last_name = user_info_data.get('last_name', ''),
-            contact_number = user_info_data.get('contact_number', ''),
-            postal_code = user_info_data.get('postal_code', ''),
-            email = user_info_data.get('email', '')
-        )
+        user_info_msg = json_format.ParseDict(user_info_data, user_pb2.UserInfo())
 
         if 'waitlist_books' in user_info_data:
             user_info_msg.waitlist_books.extend([])
 
             for book in user_info_data['waitlist_books']:
-                filtered_book = user_pb2.FilteredBooksBook(
-                    title = book.get('title', ''),
-                    checkout_list = book.get('checkout_list', []),
-                    genre = book.get('genre', ''),
-                    status = book.get('status', None),
-                    keywords = book.get('keywords', []),
-                    author = book.get('author', ''),
-                    isbn = book.get('isbn', ''),
-                    available_copies = book.get('available_copies', -1),
-                    num_copies = book.get('num_copies', -1)
-                )
+                filtered_book = json_format.ParseDict(book, user_pb2.FilteredBooksBook())
                 user_info_msg.waitlist_books.append(filtered_book)
 
         if 'borrowed_books' in user_info_data:
             user_info_msg.borrowed_books.extend([])
 
             for book in user_info_data['borrowed_books']:
-                book_message = user_pb2.AllBooksBook(
-                    title = book.get('title', ''),
-                    borrowed_by = book.get('borrowed_by', ''),
-                    genre = book.get('genre', ''),
-                    status = book.get('status', None),
-                    keywords = book.get('keywords', []),
-                    author = book.get('author', ''),
-                    book_id = book.get('book_id', -1),
-                    isbn = book.get('isbn', '')
-                )
+                book_message = json_format.ParseDict(book, user_pb2.AllBooksBook())
                 user_info_msg.borrowed_books.append(book_message)
 
         return user_pb2.UserInfoMessage(
@@ -237,13 +270,34 @@ class UserServer(user_pb2_grpc.UsersServicer):
     def UpdateUserInfo(self, request, context):
         req_data = {field.name: getattr(request, field.name) for field in request.DESCRIPTOR.fields}
 
-        update_data = {key:val for key,val in req_data.items() if key != 'uid'}
+        # Get key value pairs to be updated
+        update_data = {key:val for key,val in req_data.items() if key != 'uid' or val != ''}
 
         db.document(f"users/{req_data['uid']}").update(update_data)
 
         return user_pb2.SimpleMessage(
             success = True,
             message = f"Successfully updated {req_data.get('uid')} info"
+        )
+
+    def DeleteUser(self, request, context):
+        uid = request.uid
+
+        user_doc_ref = db.document('users/{uid}')
+        user_doc = user_doc_ref.get()
+
+        if not user_doc.exists:
+            return user_pb2.SimpleMessage(
+                success = False,
+                error_code = 404,
+                message = "Unable to find user {uid}"
+            )
+        
+        user_doc_ref.delete()
+
+        return user_pb2.SimpleMessage(
+            success = True,
+            messaage = "Successfully deleted user"
         )
 
 

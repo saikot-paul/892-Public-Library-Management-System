@@ -11,11 +11,16 @@ service Users {
 
     rpc GetRecommendations(UID) returns (FilteredBooksMessage);
 
+    rpc GetAllUsersInfo(EmptyInfo) returns (AllUsersInfoMessage);
     rpc GetUserInfo(UID) returns (UserInfoMessage);
     rpc UpdateUserInfo(UpdateUserInfoRequest) returns (SimpleMessage);
+    rpc DeleteUser(UID) returns (SimpleMessage);
 }
 
 // Params
+message EmptyInfo {
+}
+
 message UID {
     string uid = 1;
 }
@@ -73,14 +78,22 @@ message UserInfo {
     string contact_number = 3;
     string postal_code = 4;
     string email = 5;
-    repeated FilteredBooksBook waitlist_books = 6;
-    repeated AllBooksBook borrowed_books = 7;
+    bool is_admin = 6;
+    repeated FilteredBooksBook waitlist_books = 7;
+    repeated AllBooksBook borrowed_books = 8;
 }
 
 message UserInfoMessage {
     bool success = 1;
     int32 error_code = 2;
     UserInfo user_info = 3;
+    string message = 4;
+}
+
+message AllUsersInfoMessage {
+    bool success = 1;
+    int32 error_code = 2;
+    repeated UserInfo user_info = 3;
     string message = 4;
 }
 

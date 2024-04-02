@@ -14,33 +14,37 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x05users\"\x12\n\x03UID\x12\x0b\n\x03uid\x18\x01 \x01(\t\"%\n\x08UID_ISBN\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x0c\n\x04isbn\x18\x02 \x01(\t\"E\n\rSimpleMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nerror_code\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"\x92\x01\n\x0c\x41llBooksBook\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x62orrowed_by\x18\x02 \x01(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x08\x12\x10\n\x08keywords\x18\x05 \x03(\t\x12\x0e\n\x06\x61uthor\x18\x06 \x01(\t\x12\x0f\n\x07\x62ook_id\x18\x07 \x01(\x05\x12\x0c\n\x04isbn\x18\x08 \x01(\t\"\xb6\x01\n\x11\x46ilteredBooksBook\x12\r\n\x05title\x18\x01 \x01(\t\x12\x15\n\rcheckout_list\x18\x02 \x03(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x08\x12\x10\n\x08keywords\x18\x05 \x03(\t\x12\x0e\n\x06\x61uthor\x18\x06 \x01(\t\x12\x0c\n\x04isbn\x18\x07 \x01(\t\x12\x18\n\x10\x61vailable_copies\x18\x08 \x01(\x05\x12\x12\n\nnum_copies\x18\t \x01(\x05\"W\n\x0f\x41llBooksMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\"\n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x13.users.AllBooksBook\x12\x0f\n\x07message\x18\x03 \x01(\t\"a\n\x14\x46ilteredBooksMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\'\n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x18.users.FilteredBooksBook\x12\x0f\n\x07message\x18\x03 \x01(\t\"\xcc\x01\n\x08UserInfo\x12\x12\n\nfirst_name\x18\x01 \x01(\t\x12\x11\n\tlast_name\x18\x02 \x01(\t\x12\x16\n\x0e\x63ontact_number\x18\x03 \x01(\t\x12\x13\n\x0bpostal_code\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x30\n\x0ewaitlist_books\x18\x06 \x03(\x0b\x32\x18.users.FilteredBooksBook\x12+\n\x0e\x62orrowed_books\x18\x07 \x03(\x0b\x32\x13.users.AllBooksBook\"k\n\x0fUserInfoMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nerror_code\x18\x02 \x01(\x05\x12\"\n\tuser_info\x18\x03 \x01(\x0b\x32\x0f.users.UserInfo\x12\x0f\n\x07message\x18\x04 \x01(\t\"x\n\x15UpdateUserInfoRequest\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x16\n\x0e\x63ontact_number\x18\x04 \x01(\t\x12\x13\n\x0bpostal_code\x18\x05 \x01(\t2\xa7\x03\n\x05Users\x12\x36\n\x10GetBorrowedBooks\x12\n.users.UID\x1a\x16.users.AllBooksMessage\x12\x36\n\x0bGetWaitlist\x12\n.users.UID\x1a\x1b.users.FilteredBooksMessage\x12\x39\n\x10\x41ppendToWaitlist\x12\x0f.users.UID_ISBN\x1a\x14.users.SimpleMessage\x12;\n\x12\x44\x65leteFromWaitlist\x12\x0f.users.UID_ISBN\x1a\x14.users.SimpleMessage\x12=\n\x12GetRecommendations\x12\n.users.UID\x1a\x1b.users.FilteredBooksMessage\x12\x31\n\x0bGetUserInfo\x12\n.users.UID\x1a\x16.users.UserInfoMessage\x12\x44\n\x0eUpdateUserInfo\x12\x1c.users.UpdateUserInfoRequest\x1a\x14.users.SimpleMessageb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x05users\"\x0b\n\tEmptyInfo\"\x12\n\x03UID\x12\x0b\n\x03uid\x18\x01 \x01(\t\"%\n\x08UID_ISBN\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x0c\n\x04isbn\x18\x02 \x01(\t\"E\n\rSimpleMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nerror_code\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"\x92\x01\n\x0c\x41llBooksBook\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x62orrowed_by\x18\x02 \x01(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x08\x12\x10\n\x08keywords\x18\x05 \x03(\t\x12\x0e\n\x06\x61uthor\x18\x06 \x01(\t\x12\x0f\n\x07\x62ook_id\x18\x07 \x01(\x05\x12\x0c\n\x04isbn\x18\x08 \x01(\t\"\xb6\x01\n\x11\x46ilteredBooksBook\x12\r\n\x05title\x18\x01 \x01(\t\x12\x15\n\rcheckout_list\x18\x02 \x03(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x08\x12\x10\n\x08keywords\x18\x05 \x03(\t\x12\x0e\n\x06\x61uthor\x18\x06 \x01(\t\x12\x0c\n\x04isbn\x18\x07 \x01(\t\x12\x18\n\x10\x61vailable_copies\x18\x08 \x01(\x05\x12\x12\n\nnum_copies\x18\t \x01(\x05\"W\n\x0f\x41llBooksMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\"\n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x13.users.AllBooksBook\x12\x0f\n\x07message\x18\x03 \x01(\t\"a\n\x14\x46ilteredBooksMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\'\n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x18.users.FilteredBooksBook\x12\x0f\n\x07message\x18\x03 \x01(\t\"\xde\x01\n\x08UserInfo\x12\x12\n\nfirst_name\x18\x01 \x01(\t\x12\x11\n\tlast_name\x18\x02 \x01(\t\x12\x16\n\x0e\x63ontact_number\x18\x03 \x01(\t\x12\x13\n\x0bpostal_code\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x10\n\x08is_admin\x18\x06 \x01(\x08\x12\x30\n\x0ewaitlist_books\x18\x07 \x03(\x0b\x32\x18.users.FilteredBooksBook\x12+\n\x0e\x62orrowed_books\x18\x08 \x03(\x0b\x32\x13.users.AllBooksBook\"k\n\x0fUserInfoMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nerror_code\x18\x02 \x01(\x05\x12\"\n\tuser_info\x18\x03 \x01(\x0b\x32\x0f.users.UserInfo\x12\x0f\n\x07message\x18\x04 \x01(\t\"o\n\x13\x41llUsersInfoMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nerror_code\x18\x02 \x01(\x05\x12\"\n\tuser_info\x18\x03 \x03(\x0b\x32\x0f.users.UserInfo\x12\x0f\n\x07message\x18\x04 \x01(\t\"x\n\x15UpdateUserInfoRequest\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x16\n\x0e\x63ontact_number\x18\x04 \x01(\t\x12\x13\n\x0bpostal_code\x18\x05 \x01(\t2\x98\x04\n\x05Users\x12\x36\n\x10GetBorrowedBooks\x12\n.users.UID\x1a\x16.users.AllBooksMessage\x12\x36\n\x0bGetWaitlist\x12\n.users.UID\x1a\x1b.users.FilteredBooksMessage\x12\x39\n\x10\x41ppendToWaitlist\x12\x0f.users.UID_ISBN\x1a\x14.users.SimpleMessage\x12;\n\x12\x44\x65leteFromWaitlist\x12\x0f.users.UID_ISBN\x1a\x14.users.SimpleMessage\x12=\n\x12GetRecommendations\x12\n.users.UID\x1a\x1b.users.FilteredBooksMessage\x12?\n\x0fGetAllUsersInfo\x12\x10.users.EmptyInfo\x1a\x1a.users.AllUsersInfoMessage\x12\x31\n\x0bGetUserInfo\x12\n.users.UID\x1a\x16.users.UserInfoMessage\x12\x44\n\x0eUpdateUserInfo\x12\x1c.users.UpdateUserInfoRequest\x1a\x14.users.SimpleMessage\x12.\n\nDeleteUser\x12\n.users.UID\x1a\x14.users.SimpleMessageb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_UID']._serialized_start=21
-  _globals['_UID']._serialized_end=39
-  _globals['_UID_ISBN']._serialized_start=41
-  _globals['_UID_ISBN']._serialized_end=78
-  _globals['_SIMPLEMESSAGE']._serialized_start=80
-  _globals['_SIMPLEMESSAGE']._serialized_end=149
-  _globals['_ALLBOOKSBOOK']._serialized_start=152
-  _globals['_ALLBOOKSBOOK']._serialized_end=298
-  _globals['_FILTEREDBOOKSBOOK']._serialized_start=301
-  _globals['_FILTEREDBOOKSBOOK']._serialized_end=483
-  _globals['_ALLBOOKSMESSAGE']._serialized_start=485
-  _globals['_ALLBOOKSMESSAGE']._serialized_end=572
-  _globals['_FILTEREDBOOKSMESSAGE']._serialized_start=574
-  _globals['_FILTEREDBOOKSMESSAGE']._serialized_end=671
-  _globals['_USERINFO']._serialized_start=674
-  _globals['_USERINFO']._serialized_end=878
-  _globals['_USERINFOMESSAGE']._serialized_start=880
-  _globals['_USERINFOMESSAGE']._serialized_end=987
-  _globals['_UPDATEUSERINFOREQUEST']._serialized_start=989
-  _globals['_UPDATEUSERINFOREQUEST']._serialized_end=1109
-  _globals['_USERS']._serialized_start=1112
-  _globals['_USERS']._serialized_end=1535
+  _globals['_EMPTYINFO']._serialized_start=21
+  _globals['_EMPTYINFO']._serialized_end=32
+  _globals['_UID']._serialized_start=34
+  _globals['_UID']._serialized_end=52
+  _globals['_UID_ISBN']._serialized_start=54
+  _globals['_UID_ISBN']._serialized_end=91
+  _globals['_SIMPLEMESSAGE']._serialized_start=93
+  _globals['_SIMPLEMESSAGE']._serialized_end=162
+  _globals['_ALLBOOKSBOOK']._serialized_start=165
+  _globals['_ALLBOOKSBOOK']._serialized_end=311
+  _globals['_FILTEREDBOOKSBOOK']._serialized_start=314
+  _globals['_FILTEREDBOOKSBOOK']._serialized_end=496
+  _globals['_ALLBOOKSMESSAGE']._serialized_start=498
+  _globals['_ALLBOOKSMESSAGE']._serialized_end=585
+  _globals['_FILTEREDBOOKSMESSAGE']._serialized_start=587
+  _globals['_FILTEREDBOOKSMESSAGE']._serialized_end=684
+  _globals['_USERINFO']._serialized_start=687
+  _globals['_USERINFO']._serialized_end=909
+  _globals['_USERINFOMESSAGE']._serialized_start=911
+  _globals['_USERINFOMESSAGE']._serialized_end=1018
+  _globals['_ALLUSERSINFOMESSAGE']._serialized_start=1020
+  _globals['_ALLUSERSINFOMESSAGE']._serialized_end=1131
+  _globals['_UPDATEUSERINFOREQUEST']._serialized_start=1133
+  _globals['_UPDATEUSERINFOREQUEST']._serialized_end=1253
+  _globals['_USERS']._serialized_start=1256
+  _globals['_USERS']._serialized_end=1792
 # @@protoc_insertion_point(module_scope)
