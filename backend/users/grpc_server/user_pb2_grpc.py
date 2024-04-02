@@ -59,6 +59,11 @@ class UsersStub(object):
                 request_serializer=user__pb2.UID.SerializeToString,
                 response_deserializer=user__pb2.SimpleMessage.FromString,
                 )
+        self.CreateUser = channel.unary_unary(
+                '/users.Users/CreateUser',
+                request_serializer=user__pb2.CreateUserInfo.SerializeToString,
+                response_deserializer=user__pb2.SimpleMessage.FromString,
+                )
 
 
 class UsersServicer(object):
@@ -118,6 +123,12 @@ class UsersServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CreateUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_UsersServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -164,6 +175,11 @@ def add_UsersServicer_to_server(servicer, server):
             'DeleteUser': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteUser,
                     request_deserializer=user__pb2.UID.FromString,
+                    response_serializer=user__pb2.SimpleMessage.SerializeToString,
+            ),
+            'CreateUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateUser,
+                    request_deserializer=user__pb2.CreateUserInfo.FromString,
                     response_serializer=user__pb2.SimpleMessage.SerializeToString,
             ),
     }
@@ -325,6 +341,23 @@ class Users(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/users.Users/DeleteUser',
             user__pb2.UID.SerializeToString,
+            user__pb2.SimpleMessage.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CreateUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/users.Users/CreateUser',
+            user__pb2.CreateUserInfo.SerializeToString,
             user__pb2.SimpleMessage.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -17,6 +17,16 @@ class UpdateUserInfo(BaseModel):
     contact_number: str | None = None
     postal_code: str | None = None
 
+class CreateUserInfo(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None
+    contact_number: str | None = None
+    postal_code: str | None = None
+    email: str
+    is_admin: bool
+    uid: str
+
+
 @app.get("/{uid}/borrowed_books")
 def get_borrowed_books(uid: str):
     request = user_pb2.UID(uid=uid)
@@ -161,7 +171,27 @@ def update_user_info(uid: str, u_info: UpdateUserInfo):
         print(f"RPC failed with code {e.code()}: {e.details()}")
         traceback.print_exc()
         raise HTTPException(500, "Internal server error")
-    
+
+@app.post("/users")
+def create_user(u_info: CreateUserInfo):
+    request = json_format.ParseDict(u_info.dict(), user_pb2.CreateUserInfo())
+
+    try:
+        response = stub.CreateUser(request)
+        print("CreateUser Response: ", response)
+
+        data = json_format.MessageToDict(response)
+
+        if 'errorCode' in data:
+            raise HTTPException(data['errorCode'], data['message'])
+
+        return data
+    except grpc.RpcError as e:
+        print(f"RPC failed with code {e.code()}: {e.details()}")
+        traceback.print_exc()
+        raise HTTPException(500, "Internal server error")
+
+
 @app.delete("/users/{uid}")
 def delete_user(uid: str):
     request = user_pb2.UID(uid=uid)

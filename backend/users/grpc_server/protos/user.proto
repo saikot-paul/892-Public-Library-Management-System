@@ -15,6 +15,7 @@ service Users {
     rpc GetUserInfo(UID) returns (UserInfoMessage);
     rpc UpdateUserInfo(UpdateUserInfoRequest) returns (SimpleMessage);
     rpc DeleteUser(UID) returns (SimpleMessage);
+    rpc CreateUser(CreateUserInfo) returns (SimpleMessage);
 }
 
 // Params
@@ -28,6 +29,24 @@ message UID {
 message UID_ISBN {
     string uid = 1;
     string isbn = 2;
+}
+
+message UpdateUserInfoRequest {
+    string uid = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string contact_number = 4;
+    string postal_code = 5;
+}
+
+message CreateUserInfo {
+    string first_name = 1;
+    string last_name = 2;
+    string contact_number = 3;
+    string postal_code = 4;
+    string email = 5;
+    bool is_admin = 6;
+    string uid = 7;
 }
 
 // Return messages
@@ -79,8 +98,9 @@ message UserInfo {
     string postal_code = 4;
     string email = 5;
     bool is_admin = 6;
-    repeated FilteredBooksBook waitlist_books = 7;
-    repeated AllBooksBook borrowed_books = 8;
+    string uid = 7;
+    repeated FilteredBooksBook waitlist_books = 9;
+    repeated AllBooksBook borrowed_books = 10;
 }
 
 message UserInfoMessage {
@@ -95,12 +115,4 @@ message AllUsersInfoMessage {
     int32 error_code = 2;
     repeated UserInfo user_info = 3;
     string message = 4;
-}
-
-message UpdateUserInfoRequest {
-    string uid = 1;
-    string first_name = 2;
-    string last_name = 3;
-    string contact_number = 4;
-    string postal_code = 5;
 }
