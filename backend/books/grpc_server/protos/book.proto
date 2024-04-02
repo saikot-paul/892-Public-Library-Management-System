@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package books; 
 
+import "google/protobuf/empty.proto";
+
 
 message ISBN {
     string isbn_num = 1;
@@ -31,6 +33,8 @@ service Books {
 
     rpc CheckoutBook(CheckInfo) returns (Successful); 
     rpc ReturnBook(ReturnBookInfo) returns (Successful);
+
+    rpc GetAllBooks(Genre) returns (UBookArr); 
 }
 
 message Book { 
@@ -38,6 +42,11 @@ message Book {
     string genre = 2; 
     string author = 3; 
     string isbn = 4; 
+}
+
+message UBookArr { 
+    bool empty = 1; 
+    repeated UBook books = 2; 
 }
 
 message UBook { 
