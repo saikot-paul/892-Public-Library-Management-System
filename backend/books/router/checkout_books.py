@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from .firestore_db import db
+from backend.users.grpc_server.firestore_db import db
 from .search_books import get_books_by_isbn
 
 router = APIRouter()
