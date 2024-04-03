@@ -4,6 +4,7 @@ import book_pb2_grpc
 import traceback
 from google.protobuf import json_format
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 
@@ -68,11 +69,12 @@ async def search_title(title: str):
         print("SearchTitle Response:", response)
         data = json_format.MessageToDict(response)
         empty = False if data else True
-
+        """
         return {
             "empty": empty,
             "data": data
-        }
+        }"""
+        return JSONResponse(content=data)
     except grpc.RpcError as e:
         print(f"RPC failed with code {e.code()}: {e.details()}")
         traceback.print_exc()
