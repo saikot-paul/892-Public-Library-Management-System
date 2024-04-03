@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import EditBooks from './pages/EditBooks'
 import EditUsers from './pages/EditUsers'
+import AddBooks from './pages/AddBooks'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/AdminDashboard" element={<AdminDashboard />} />
           <Route path="/EditBooks" element={<EditBooks/>}/>
           <Route path="/EditUsers" element={<EditUsers/>}/>
+          <Route path="/AddBooks" element={<AddBooks/>}/>
         </Routes>
       </Router>
     </>
