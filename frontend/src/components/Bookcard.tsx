@@ -1,3 +1,4 @@
+import axios from 'axios';
 import  Card  from "@mui/material/Card";
 import Typography  from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
@@ -5,6 +6,21 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 
 function Bookcard() {
+
+
+
+
+// Make a GET request to a URL
+axios.get("127.0.0.1:3000/users/N1UpfyvddsUGcRurxhrhxD5uaKH3")
+  .then(response => {
+    // Handle successful response
+    console.log(response);
+  })
+  .catch(error => {
+    // Handle error
+    console.error('Error fetching data:', error);
+  });
+
     return ( 
         <Card sx={{ minWidth: 275 }}>
       <CardContent>
@@ -20,6 +36,7 @@ function Bookcard() {
         <Typography variant="body2">
           Description of the book can go here
         </Typography>
+        <Typography>response</Typography>
       </CardContent>
       <CardActions>
         <Button size="small">Add</Button>
