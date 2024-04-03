@@ -9,6 +9,7 @@ import Cart from './pages/Cart'
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import EditBooks from './pages/EditBooks'
+import EditUsers from './pages/EditUsers'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/AdminDashboard" element={<AdminDashboard />} />
           <Route path="/EditBooks" element={<EditBooks/>}/>
+          <Route path="/EditUsers" element={<EditUsers/>}/>
         </Routes>
       </Router>
     </>

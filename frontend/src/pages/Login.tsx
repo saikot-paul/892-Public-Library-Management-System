@@ -16,7 +16,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const gotoHome = (uid: string) => {
-    navigate("/maincontent", { state: { uid: uid } });
+    navigate("/Explore", { state: { uid: uid } });
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,11 +31,9 @@ const Login: React.FC = () => {
       const userCreds = await signInWithEmailAndPassword(auth, email, password);
       const user = userCreds.user;
 
-      if (user && user.emailVerified) {
+      if (user) { // Removed condition for email verification
         const uid = user.uid;
         gotoHome(uid);
-      } else {
-        setError("Please verify your email to log in.");
       }
 
     } catch (e) {
@@ -75,9 +73,6 @@ const Login: React.FC = () => {
   return (
     <div>
       <div className="top-bar">
-        <h1 className="title">
-          Simply<span className="colored-words">Plan.</span>
-        </h1>
       </div>
       <div className="login-container">
         <h2>Login</h2>
@@ -110,8 +105,8 @@ const Login: React.FC = () => {
             </Link>
           </label>
           <Routes>
-            <Route path="/maincontent" element={<Home />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/Explore" element={<Home />} />
+            <Route path="/Register" element={<Register />} />
           </Routes>
           {error && <p className="error-message">{error}</p>}
         </form>
