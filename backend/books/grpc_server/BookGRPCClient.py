@@ -5,6 +5,7 @@ import traceback
 from google.protobuf import json_format
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
@@ -34,7 +35,13 @@ class ReturnBookData(BaseModel):
 
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5173/"],
+    allow_credentials=True,
+    allow_methods=[""],
+    allow_headers=[""],
+)
 
 @app.get("/books/search_isbn/{isbn}")
 async def search_isbn(isbn: str):
