@@ -2,7 +2,7 @@ import grpc
 import book_pb2
 import book_pb2_grpc
 import traceback
-from google.protobuf import json_format
+from google.protobuf import json_format, empty_pb2
 from fastapi import FastAPI
 from pydantic import BaseModel
 
@@ -99,6 +99,26 @@ async def search_genre(genre: str):
     except grpc.RpcError as e:
         print(f"RPC failed with code {e.code()}: {e.details()}")
         traceback.print_exc()
+
+
+@app.get("/books/get_all")
+async def get_all():
+    request = book_pb2.Genre(genre_str="all")
+
+    try:
+        channel = grpc.insecure_channel('localhost:50051')
+        stub = book_pb2_grpc.BooksStub(channel)
+
+        try:
+            response = stub.GetAllBooks(request)
+            print("GetAllBooks Response:", response)
+
+            return json_format.MessageToJson(response)
+        except grpc.RpcError as e:
+            print(f"RPC failed with code {e.code()}: {e.details()}")
+            traceback.print_exc()
+    except Exception as e:
+        print(f'Exception {e}')
 
 
 @app.post("/books/create_book")
@@ -208,3 +228,4 @@ async def return_book(data: ReturnBookData):
     except grpc.RpcError as e:
         print(f"RPC failed with code {e.code()}: {e.details()}")
         traceback.print_exc()
+

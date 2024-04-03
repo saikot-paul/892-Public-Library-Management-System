@@ -12,39 +12,42 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nbook.proto\x12\x05\x62ooks\"\x18\n\x04ISBN\x12\x10\n\x08isbn_num\x18\x01 \x01(\t\"\x1a\n\x05Title\x12\x11\n\ttitle_str\x18\x01 \x01(\t\"\x1a\n\x05Genre\x12\x11\n\tgenre_str\x18\x01 \x01(\t\"*\n\nSuccessful\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"B\n\x04\x42ook\x12\r\n\x05title\x18\x01 \x01(\t\x12\r\n\x05genre\x18\x02 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x03 \x01(\t\x12\x0c\n\x04isbn\x18\x04 \x01(\t\"d\n\x05UBook\x12\r\n\x05title\x18\x01 \x01(\t\x12\r\n\x05genre\x18\x02 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x03 \x01(\t\x12\x0c\n\x04isbn\x18\x04 \x01(\t\x12\x0f\n\x07\x62ook_id\x18\x05 \x01(\x05\x12\x0e\n\x06status\x18\x06 \x01(\x08\"\x19\n\x06\x42ookID\x12\x0f\n\x07\x62ook_id\x18\x01 \x01(\x05\"*\n\tCheckInfo\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0c\n\x04isbn\x18\x02 \x01(\t\"2\n\x0eReturnBookInfo\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x62ook_id\x18\x02 \x01(\x05\"\x91\x01\n\nBookSearch\x12\r\n\x05title\x18\x01 \x01(\t\x12\x15\n\rcheckout_list\x18\x02 \x03(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x10\n\x08keywords\x18\x04 \x03(\t\x12\x0e\n\x06\x61uthor\x18\x05 \x01(\t\x12\x18\n\x10\x61vailable_copies\x18\x06 \x01(\x05\x12\x12\n\nnum_copies\x18\x07 \x01(\x05\"H\n\x08\x42ookISBN\x12\r\n\x05\x65mpty\x18\x01 \x01(\x08\x12$\n\x04\x62ook\x18\x02 \x01(\x0b\x32\x11.books.BookSearchH\x00\x88\x01\x01\x42\x07\n\x05_book\"-\n\tBookArray\x12 \n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x11.books.BookSearch2\x8b\x03\n\x05\x42ooks\x12*\n\nSearchISBN\x12\x0b.books.ISBN\x1a\x0f.books.BookISBN\x12-\n\x0bSearchTitle\x12\x0c.books.Title\x1a\x10.books.BookArray\x12-\n\x0bSearchGenre\x12\x0c.books.Genre\x1a\x10.books.BookArray\x12,\n\nCreateBook\x12\x0b.books.Book\x1a\x11.books.Successful\x12-\n\nUpdateBook\x12\x0c.books.UBook\x1a\x11.books.Successful\x12.\n\nDeleteBook\x12\r.books.BookID\x1a\x11.books.Successful\x12\x33\n\x0c\x43heckoutBook\x12\x10.books.CheckInfo\x1a\x11.books.Successful\x12\x36\n\nReturnBook\x12\x15.books.ReturnBookInfo\x1a\x11.books.Successfulb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nbook.proto\x12\x05\x62ooks\x1a\x1bgoogle/protobuf/empty.proto\"\x18\n\x04ISBN\x12\x10\n\x08isbn_num\x18\x01 \x01(\t\"\x1a\n\x05Title\x12\x11\n\ttitle_str\x18\x01 \x01(\t\"\x1a\n\x05Genre\x12\x11\n\tgenre_str\x18\x01 \x01(\t\"*\n\nSuccessful\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"B\n\x04\x42ook\x12\r\n\x05title\x18\x01 \x01(\t\x12\r\n\x05genre\x18\x02 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x03 \x01(\t\x12\x0c\n\x04isbn\x18\x04 \x01(\t\"6\n\x08UBookArr\x12\r\n\x05\x65mpty\x18\x01 \x01(\x08\x12\x1b\n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x0c.books.UBook\"d\n\x05UBook\x12\r\n\x05title\x18\x01 \x01(\t\x12\r\n\x05genre\x18\x02 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x03 \x01(\t\x12\x0c\n\x04isbn\x18\x04 \x01(\t\x12\x0f\n\x07\x62ook_id\x18\x05 \x01(\x05\x12\x0e\n\x06status\x18\x06 \x01(\x08\"\x19\n\x06\x42ookID\x12\x0f\n\x07\x62ook_id\x18\x01 \x01(\x05\"*\n\tCheckInfo\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0c\n\x04isbn\x18\x02 \x01(\t\"2\n\x0eReturnBookInfo\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x0f\n\x07\x62ook_id\x18\x02 \x01(\x05\"\x91\x01\n\nBookSearch\x12\r\n\x05title\x18\x01 \x01(\t\x12\x15\n\rcheckout_list\x18\x02 \x03(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x10\n\x08keywords\x18\x04 \x03(\t\x12\x0e\n\x06\x61uthor\x18\x05 \x01(\t\x12\x18\n\x10\x61vailable_copies\x18\x06 \x01(\x05\x12\x12\n\nnum_copies\x18\x07 \x01(\x05\"H\n\x08\x42ookISBN\x12\r\n\x05\x65mpty\x18\x01 \x01(\x08\x12$\n\x04\x62ook\x18\x02 \x01(\x0b\x32\x11.books.BookSearchH\x00\x88\x01\x01\x42\x07\n\x05_book\"-\n\tBookArray\x12 \n\x05\x62ooks\x18\x02 \x03(\x0b\x32\x11.books.BookSearch2\xb9\x03\n\x05\x42ooks\x12*\n\nSearchISBN\x12\x0b.books.ISBN\x1a\x0f.books.BookISBN\x12-\n\x0bSearchTitle\x12\x0c.books.Title\x1a\x10.books.BookArray\x12-\n\x0bSearchGenre\x12\x0c.books.Genre\x1a\x10.books.BookArray\x12,\n\nCreateBook\x12\x0b.books.Book\x1a\x11.books.Successful\x12-\n\nUpdateBook\x12\x0c.books.UBook\x1a\x11.books.Successful\x12.\n\nDeleteBook\x12\r.books.BookID\x1a\x11.books.Successful\x12\x33\n\x0c\x43heckoutBook\x12\x10.books.CheckInfo\x1a\x11.books.Successful\x12\x36\n\nReturnBook\x12\x15.books.ReturnBookInfo\x1a\x11.books.Successful\x12,\n\x0bGetAllBooks\x12\x0c.books.Genre\x1a\x0f.books.UBookArrb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'book_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_ISBN']._serialized_start=21
-  _globals['_ISBN']._serialized_end=45
-  _globals['_TITLE']._serialized_start=47
-  _globals['_TITLE']._serialized_end=73
-  _globals['_GENRE']._serialized_start=75
-  _globals['_GENRE']._serialized_end=101
-  _globals['_SUCCESSFUL']._serialized_start=103
-  _globals['_SUCCESSFUL']._serialized_end=145
-  _globals['_BOOK']._serialized_start=147
-  _globals['_BOOK']._serialized_end=213
-  _globals['_UBOOK']._serialized_start=215
-  _globals['_UBOOK']._serialized_end=315
-  _globals['_BOOKID']._serialized_start=317
-  _globals['_BOOKID']._serialized_end=342
-  _globals['_CHECKINFO']._serialized_start=344
-  _globals['_CHECKINFO']._serialized_end=386
-  _globals['_RETURNBOOKINFO']._serialized_start=388
-  _globals['_RETURNBOOKINFO']._serialized_end=438
-  _globals['_BOOKSEARCH']._serialized_start=441
-  _globals['_BOOKSEARCH']._serialized_end=586
-  _globals['_BOOKISBN']._serialized_start=588
-  _globals['_BOOKISBN']._serialized_end=660
-  _globals['_BOOKARRAY']._serialized_start=662
-  _globals['_BOOKARRAY']._serialized_end=707
-  _globals['_BOOKS']._serialized_start=710
-  _globals['_BOOKS']._serialized_end=1105
+  _globals['_ISBN']._serialized_start=50
+  _globals['_ISBN']._serialized_end=74
+  _globals['_TITLE']._serialized_start=76
+  _globals['_TITLE']._serialized_end=102
+  _globals['_GENRE']._serialized_start=104
+  _globals['_GENRE']._serialized_end=130
+  _globals['_SUCCESSFUL']._serialized_start=132
+  _globals['_SUCCESSFUL']._serialized_end=174
+  _globals['_BOOK']._serialized_start=176
+  _globals['_BOOK']._serialized_end=242
+  _globals['_UBOOKARR']._serialized_start=244
+  _globals['_UBOOKARR']._serialized_end=298
+  _globals['_UBOOK']._serialized_start=300
+  _globals['_UBOOK']._serialized_end=400
+  _globals['_BOOKID']._serialized_start=402
+  _globals['_BOOKID']._serialized_end=427
+  _globals['_CHECKINFO']._serialized_start=429
+  _globals['_CHECKINFO']._serialized_end=471
+  _globals['_RETURNBOOKINFO']._serialized_start=473
+  _globals['_RETURNBOOKINFO']._serialized_end=523
+  _globals['_BOOKSEARCH']._serialized_start=526
+  _globals['_BOOKSEARCH']._serialized_end=671
+  _globals['_BOOKISBN']._serialized_start=673
+  _globals['_BOOKISBN']._serialized_end=745
+  _globals['_BOOKARRAY']._serialized_start=747
+  _globals['_BOOKARRAY']._serialized_end=792
+  _globals['_BOOKS']._serialized_start=795
+  _globals['_BOOKS']._serialized_end=1236
 # @@protoc_insertion_point(module_scope)
