@@ -54,6 +54,11 @@ class BooksStub(object):
                 request_serializer=book__pb2.ReturnBookInfo.SerializeToString,
                 response_deserializer=book__pb2.Successful.FromString,
                 )
+        self.GetAllBooks = channel.unary_unary(
+                '/books.Books/GetAllBooks',
+                request_serializer=book__pb2.Genre.SerializeToString,
+                response_deserializer=book__pb2.UBookArr.FromString,
+                )
 
 
 class BooksServicer(object):
@@ -107,6 +112,12 @@ class BooksServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAllBooks(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BooksServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -149,6 +160,11 @@ def add_BooksServicer_to_server(servicer, server):
                     servicer.ReturnBook,
                     request_deserializer=book__pb2.ReturnBookInfo.FromString,
                     response_serializer=book__pb2.Successful.SerializeToString,
+            ),
+            'GetAllBooks': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllBooks,
+                    request_deserializer=book__pb2.Genre.FromString,
+                    response_serializer=book__pb2.UBookArr.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -293,5 +309,22 @@ class Books(object):
         return grpc.experimental.unary_unary(request, target, '/books.Books/ReturnBook',
             book__pb2.ReturnBookInfo.SerializeToString,
             book__pb2.Successful.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetAllBooks(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/books.Books/GetAllBooks',
+            book__pb2.Genre.SerializeToString,
+            book__pb2.UBookArr.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
