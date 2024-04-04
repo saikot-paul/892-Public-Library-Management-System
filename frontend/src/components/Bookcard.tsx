@@ -3,6 +3,9 @@ import Typography  from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 
 
@@ -24,7 +27,12 @@ function Bookcard(book) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add</Button>
+        <Button size="small">
+          <FavoriteBorderIcon/>
+        </Button>
+        <Button size="small">
+          <AddShoppingCartIcon/>
+        </Button>
       </CardActions>
     </Card>
      );
