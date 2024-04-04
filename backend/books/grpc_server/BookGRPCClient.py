@@ -4,6 +4,8 @@ import book_pb2_grpc
 import traceback
 from google.protobuf import json_format, empty_pb2
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
@@ -33,7 +35,13 @@ class ReturnBookData(BaseModel):
 
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5173/"],
+    allow_credentials=True,
+    allow_methods=[""],
+    allow_headers=[""],
+)
 
 @app.get("/books/search_isbn/{isbn}")
 async def search_isbn(isbn: str):
@@ -68,11 +76,12 @@ async def search_title(title: str):
         print("SearchTitle Response:", response)
         data = json_format.MessageToDict(response)
         empty = False if data else True
-
+        """
         return {
             "empty": empty,
             "data": data
-        }
+        }"""
+        return JSONResponse(content=data)
     except grpc.RpcError as e:
         print(f"RPC failed with code {e.code()}: {e.details()}")
         traceback.print_exc()
