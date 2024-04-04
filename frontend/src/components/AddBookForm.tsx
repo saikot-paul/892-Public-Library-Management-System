@@ -24,7 +24,12 @@ const AddBookForm: React.FC = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          Title: formData.title,
+          Author: formData.author,
+          Genre: formData.genre,
+          ISBN: formData.isbn
+        })
       });
       if (response.ok) {
         // Clear form data after successful save
@@ -38,6 +43,8 @@ const AddBookForm: React.FC = () => {
   };
   
   
+  
+  
 
   const handleCancel = () => {
     navigate('/admindashboard');
@@ -45,7 +52,6 @@ const AddBookForm: React.FC = () => {
 
   return (
     <div>
-      <h2>Add Book</h2>
       <TextField
         label="Title"
         name="title"
