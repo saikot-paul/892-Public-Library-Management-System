@@ -19,7 +19,13 @@ interface Book {
   status: boolean;
 }
 
-function Carousel() {
+interface CarouselProps {
+    carouselprop: string;
+  }
+
+  const Carousel: React.FC<CarouselProps> = ({ carouselprop }) => {
+  var genre = ""
+  genre = carouselprop;
   const [cards, setCards] = useState<React.ReactElement[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [books, setBooks] = useState<any[]>([]);
@@ -71,8 +77,8 @@ function Carousel() {
       }, []);
 
     async function fetchData() {
-        // Make API request and fetch JSON data
-    axios.get('http://127.0.0.1:5000/books/search_genre/reference')
+    // Make API request and fetch JSON data
+    axios.get(`http://127.0.0.1:5000/books/search_genre/${carouselprop}`)
     .then(response => {
       // Parse JSON data from response
       const jsonData = response.data.data.books;
@@ -98,17 +104,77 @@ function Carousel() {
     )) : null;*/
     console.log(books)
     console.log(cards)
+    console.log(carouselprop)
   return (
     <div>
-    <Typography>Carousel</Typography>    
+    <Typography>{carouselprop}</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        alignContent: "center",
+        justifyContent: "center",
+        height: "100%",
+        width: "100%",
+        marginTop: "40px",
+      }}
+    >
+    <IconButton
+        onClick={handlePrevPage}
+        sx={{ margin: 5, color:"white" }}
+        disabled={currentPage === 0}
+      >
+        {/* this is the button that will go to the previous page you can change these icons to whatever you wish*/}
+        <NavigateBeforeIcon />
+    </IconButton>
+    <Box sx={{ width: `${containerWidth}%`, height: "100%" }}>    
     {loading ? (<p>loading...</p>) : (
-    //  outer box that holds the carousel and the buttons
-    
     books[0].map((book, index) => (
+        <Box
+            key={`book-${index}`}
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: currentPage === index ? "block" : "none",
+            }}
+          >
+            <Bookcard key={index} book={book} />
+            {/* this is the slide animation that will be used to slide the cards in and out*/}
+            <Slide direction={slideDirection} in={currentPage === index}>
+              <Stack
+                spacing={2}
+                direction="row"
+                alignContent="center"
+                justifyContent="center"
+                sx={{ width: "100%", height: "100%" }}
+              >
+                {/*<Bookcard book={book}/>*/}
+                {/* this slices the cards array to only display the amount you have previously determined per page*/}
+                {cards.slice(
+                  index * cardsPerPage,
+                  index * cardsPerPage + cardsPerPage
+                )}
+              </Stack>
+            </Slide>
+          </Box>
         
-        <Bookcard key={index} book={book} />
       ))
     )}
+    </Box>
+    <IconButton
+        onClick={handleNextPage}
+        sx={{
+          margin: 5,
+          color: "white"
+        }}
+        disabled={
+          currentPage >= Math.ceil((cards.length || 0) / cardsPerPage) - 1
+        }
+      >
+        <NavigateNextIcon />
+    </IconButton>
+    </Box>
     </div>
   );
 }

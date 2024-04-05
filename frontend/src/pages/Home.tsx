@@ -31,7 +31,7 @@ function Home() {
     }
 
     return ( 
-        <div>
+        <div className='page'>
             <Navbar/>
             <Typography>This is homepage</Typography>
             {loading ? (

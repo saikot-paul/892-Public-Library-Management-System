@@ -17,28 +17,23 @@ interface Book {
   bookId: number;
   status: boolean;
 }
+interface CarouselProps {
+  carouselprop: string;
+}
 
-function Carousel() {
-  // setting the state variables
-  // cards will be the cards that are displayed
+const Carousel: React.FC<CarouselProps> = ({ carouselprop }) => {
   const [cards, setCards] = useState<React.ReactElement[]>([]);
-  // currentPage is the current page of the cards that is currently displayed
   const [currentPage, setCurrentPage] = useState(0);
-  // slideDirection is the direction that the cards will slide in
   const [slideDirection, setSlideDirection] = useState<
     "right" | "left" | undefined
   >("left");
-
-  // cardsPerPage is the number of cards that will be displayed per page
-  // you can modify for your needs
   const cardsPerPage = 3;
-  // this is just a dummy array of cards it uses the MUI card demo and repeats it 10 times
   const duplicateCards: React.ReactElement[] = Array.from(
     { length: 10 },
-    (_, i) => <Bookcard key={i} />
+    (_, i) => <Card key={i} />
   );
-
-  // these two functions handle changing the pages
+  const [books, setBooks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const handleNextPage = () => {
     setSlideDirection("left");
     setCurrentPage((prevPage) => prevPage + 1);
@@ -64,8 +59,7 @@ function Carousel() {
   const containerWidth = cardsPerPage * 33; // rem per card
 
 
-    const [books, setBooks] = useState<Book[]>([]);
-    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         fetchData(); // Fetch data when component mounts
@@ -75,13 +69,13 @@ function Carousel() {
 
     async function fetchData() {
         // Make API request and fetch JSON data
-    axios.get('http://127.0.0.1:5000/books/search_genre/fiction')
+    axios.get(`http://127.0.0.1:5000/books/search_genre/${carouselprop}`)
     .then(response => {
       // Parse JSON data from response
       const jsonData = response.data.data.books;
       console.log(jsonData)
       // Set the data in state
-      setBooks([...books, jsonData]);
+      setBooks([jsonData]);
       setLoading(false); // Set loading to false after data is fetched
       //console.log(books[0][1])
     })

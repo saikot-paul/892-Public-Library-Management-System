@@ -74,8 +74,11 @@ class BookServer(book_pb2_grpc.BooksServicer):
     def SearchGenre(self, request, context):
 
         genre = request.genre_str
-
-        gen = genre.capitalize()
+      
+        if(genre[:3].lower() != "non"): 
+            gen = " ".join([item.capitalize() for item in genre.split(" ")])
+        else:
+            gen = "Non-Fiction"
         print(f'Called SearchGenre: {gen}')
         query_ref = db.collection('filtered_books').where(
             'Genre', '==', gen)
