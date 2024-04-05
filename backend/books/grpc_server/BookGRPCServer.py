@@ -74,8 +74,11 @@ class BookServer(book_pb2_grpc.BooksServicer):
     def SearchGenre(self, request, context):
 
         genre = request.genre_str
-
-        gen = genre.capitalize()
+      
+        if(genre[:3].lower() != "non"): 
+            gen = " ".join([item.capitalize() for item in genre.split(" ")])
+        else:
+            gen = "Non-Fiction"
         print(f'Called SearchGenre: {gen}')
         query_ref = db.collection('filtered_books').where(
             'Genre', '==', gen)
@@ -101,6 +104,30 @@ class BookServer(book_pb2_grpc.BooksServicer):
             return book_pb2.BookArray(books=books)
 
         return book_pb2.BookArray()
+
+    def GetAllBooks(self, request, context):
+
+        print(request)
+        docs = db.collection('all_books').get()
+
+        books = []
+        for book in docs:
+            data = book.to_dict()
+            tmp = book_pb2.UBook(
+                title=data['Title'],
+                genre=data['Genre'],
+                author=data['Author'],
+                isbn=data["ISBN"],
+                book_id=data["Book_ID"],
+                status=data["Status"]
+            )
+            books.append(tmp)
+
+        print(books)
+        empty = len(books) == 0
+        return book_pb2.UBookArr(
+            empty=empty, books=books
+        )
 
     def CreateBook(self, request, context):
 
