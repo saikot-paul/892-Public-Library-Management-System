@@ -34,7 +34,7 @@ interface CarouselProps {
   const [slideDirection, setSlideDirection] = useState<
     "right" | "left" | undefined
   >("left");
-  const cardsPerPage = 3;
+  const cardsPerPage = 1;
   const containerWidth = cardsPerPage * 33; // rem per card
   // this is just a dummy array of cards it uses the MUI card demo and repeats it 10 times
   const duplicateCards: React.ReactElement[] = Array.from(
@@ -128,7 +128,7 @@ interface CarouselProps {
         {/* this is the button that will go to the previous page you can change these icons to whatever you wish*/}
         <NavigateBeforeIcon />
     </IconButton>
-    <Box sx={{ width: `${containerWidth}%`, height: "100%" }}>    
+    <Box sx={{ width: `100%`, height: "100%" }}>    
     {loading ? (<p>loading...</p>) : (
     books[0].map((book, index) => (
         <Box

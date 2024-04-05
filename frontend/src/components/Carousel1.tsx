@@ -21,7 +21,7 @@ interface CarouselProps {
   carouselprop: string;
 }
 
-const Carousel: React.FC<CarouselProps> = ({ carouselprop }) => {
+const Carousel1: React.FC<CarouselProps> = ({ carouselprop }) => {
   const [cards, setCards] = useState<React.ReactElement[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDirection, setSlideDirection] = useState<
@@ -167,4 +167,4 @@ const Carousel: React.FC<CarouselProps> = ({ carouselprop }) => {
   );
 }
 
-export default Carousel;
+export default Carousel1;

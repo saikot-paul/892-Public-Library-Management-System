@@ -16,13 +16,13 @@ function Bookcard(book) {
     return ( 
         <Card sx={{ minWidth: 200, maxWidth:200, maxHeight:200, minHeight:200 }}>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
           {book.book.genre}
         </Typography>
-        <Typography variant="h5" component="div">
+        <Typography variant="h6" component="div">
           {book.book.title}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography sx={{ mb: 1.5,fontSize:14 }}  color="text.secondary">
           {book.book.author}
         </Typography>
       </CardContent>

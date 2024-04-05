@@ -1,6 +1,7 @@
 import Typography from "@mui/material/Typography";
-import Carousel from "../components/Carousel";
+import Carousel1 from "../components/Carousel1";
 import Carousel2 from "../components/Carousel2";
+import Carousel3 from "../components/Carousel3";
 import Navbar from "../components/Navbar";
 import "../assets/page.css";
 
@@ -12,10 +13,11 @@ function Explore() {
         <div className="page">
         <Navbar/>
         <Typography>This is explore page</Typography>
-        <Carousel2 carouselprop="Fiction"/>
-        <Carousel2 carouselprop="Non-Fiction"/>
-        <Carousel2 carouselprop="Science%20Fiction"/>
-        <Carousel2 carouselprop="Reference"/>
+        <Carousel3 carouselprop="Fiction"/>
+        <Carousel3 carouselprop="Non-Fiction"/>
+        <Carousel3 carouselprop="Science%20Fiction"/>
+        <Carousel3 carouselprop="Reference"/>
+        <Carousel3 carouselprop="Drama"/>
         </div> 
      );
 }
