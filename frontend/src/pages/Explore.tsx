@@ -12,7 +12,7 @@ function Explore() {
     return (
         <div className="page">
         <Navbar/>
-        <Typography>This is explore page</Typography>
+        <Typography variant="h3">Explore</Typography>
         <Carousel3 carouselprop="Fiction"/>
         <Carousel3 carouselprop="Non-Fiction"/>
         <Carousel3 carouselprop="Science%20Fiction"/>

@@ -14,7 +14,7 @@ function Bookcard(book) {
   
 
     return ( 
-        <Card sx={{ minWidth: 200, maxWidth:200, maxHeight:200, minHeight:200 }}>
+        <Card sx={{ minWidth: 200, maxWidth:200, maxHeight:200, minHeight:200,ml:5, mr:5 }}>
       <CardContent>
         <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
           {book.book.genre}

@@ -97,7 +97,9 @@ interface Book {
   
     return (
       <div>
-      <Typography>{carouselprop}</Typography>
+      {carouselprop=="Science%20Fiction"? (<Typography sx={{textAlign:"left", ml:10}}>Science Fiction</Typography>) : (<Typography sx={{textAlign:"left", ml:10}}>{carouselprop}</Typography>)
+      
+      }
       <Box
         sx={{
           display: "flex",
@@ -108,7 +110,7 @@ interface Book {
           height: "100%",
           width: "100%",
           marginTop: "20px",
-          marginBottom:"20px"
+          marginBottom:"20px",
         }}
       >
         
@@ -137,7 +139,7 @@ interface Book {
                 max: 3000,
                 min: 1024
             },
-            items: 4,
+            items: 3,
             partialVisibilityGutter: 40
             },
             mobile: {
