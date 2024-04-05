@@ -1,4 +1,5 @@
-import * as React from "react";
+import * as React  from "react";
+import { useState, useRef } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,7 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom"; // Import useHistory from react-router-dom
 
 import "../assets/Navbar.css";
 
@@ -29,6 +30,10 @@ function Navbar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const [searchQuery, setSearchQuery] = React.useState<string>(""); // State to store search query
+  //const history = useHistory(); // useHistory hook for navigation
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -45,6 +50,16 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
+  const handleSearch = () => {
+    // Redirect to a new route with the search query as a prop
+    console.log(searchQuery);
+    //history.push(`/search/${searchQuery}`);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
   /* HAVE TO FIGURE OUT LOGOUT FUNCTION
   const handleLogout = () => {
     setAnchorElUser(null);
@@ -55,7 +70,7 @@ function Navbar() {
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.15),
     },
     marginLeft: 0,
     width: '100%',
@@ -91,6 +106,12 @@ function Navbar() {
       },
     },
   }));
+
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [searchQuery]);
 
   return (
     <AppBar position="static" className="navbar">
@@ -201,8 +222,17 @@ function Navbar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              id="searchfield"
+              inputRef={inputRef}
               placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </Search>
           </Box>
