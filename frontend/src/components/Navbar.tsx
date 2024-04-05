@@ -16,7 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
-import { NavLink, useHistory } from "react-router-dom"; // Import useHistory from react-router-dom
+import { NavLink, useNavigate } from "react-router-dom"; // Import useHistory from react-router-dom
 
 import "../assets/Navbar.css";
 
@@ -32,7 +32,7 @@ function Navbar() {
   );
 
   const [searchQuery, setSearchQuery] = React.useState<string>(""); // State to store search query
-  //const history = useHistory(); // useHistory hook for navigation
+  const navigate = useNavigate(); // useNavigate hook for navigation
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -53,7 +53,7 @@ function Navbar() {
   const handleSearch = () => {
     // Redirect to a new route with the search query as a prop
     console.log(searchQuery);
-    //history.push(`/search/${searchQuery}`);
+    navigate(`/Search/${searchQuery}`);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

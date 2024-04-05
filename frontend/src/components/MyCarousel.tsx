@@ -21,7 +21,7 @@ interface Book {
     carouselprop: string;
   }
   
-  const Carousel3: React.FC<CarouselProps> = ({ carouselprop }) => {
+  const MyCarousel: React.FC<CarouselProps> = ({ carouselprop }) => {
     const [cards, setCards] = useState<React.ReactElement[]>([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [slideDirection, setSlideDirection] = useState<
@@ -178,5 +178,5 @@ interface Book {
     );
   }
   
-  export default Carousel3;
+  export default MyCarousel;
 
