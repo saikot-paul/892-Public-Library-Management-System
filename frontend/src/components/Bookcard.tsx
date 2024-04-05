@@ -26,7 +26,7 @@ function Bookcard(book) {
           {book.book.author}
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{alignItems:"bottom"}}>
         <Button size="small">
           <FavoriteBorderIcon/>
         </Button>
